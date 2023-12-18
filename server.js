@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Patient = require("./models/patientModel;");
+const Patient = require("./models/patientModel");
 const app = express();
 
 app.use(express.json());
@@ -32,6 +32,20 @@ app.get("/patients/view/", async (req, res) => {
   try {
     const patient = await Patient.find({});
     res.status(200).json(patient);
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+});
+
+app.put("/patients/update/", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const patient = await Patient.findAndUpdate(id, req.body);
+    if (!patient) {
+      res.status(404).json({ message: `cannot find patient with id ${id}` });
+    }
+    const updatedPatient = await Patient.find(id);
+    res.status(200).json(updatedPatient);
   } catch (error) {
     res.status(500).json(error.message);
   }

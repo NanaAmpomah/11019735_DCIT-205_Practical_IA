@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Patient = require("./models/patientMode;");
+const Patient = require("./models/patientModel;");
 const app = express();
 
 app.use(express.json());
@@ -17,3 +17,16 @@ app.post("/patients", async (req, res) => {
     res.status(500).json(error.message);
   }
 });
+
+app.get("/patients/view/:id", async (req,res) =>{
+  try {
+    const {id} = req.params;
+    const  patient =await Patients.findById(id);
+    res.status(200).json(patient);
+    
+  }
+   catch (error) {
+    res.status(500).json(error.message);
+  }
+  }
+);
